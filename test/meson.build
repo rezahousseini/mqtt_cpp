@@ -61,17 +61,28 @@ if get_option('MQTT_TEST_7')
   ]
 endif
 
-boost_unit_test_framework_dep = dependency(
-  'boost', 
-  modules : 'unit_test_framework', 
-  version : '>=1.67.0'
-)
+if meson.is_cross_build()
+  cxx = meson.get_compiler('cpp')
+  boost_unit_test_framework_lib = cxx.find_library('boost_unit_test_framework', 
+    dirs : meson.get_cross_property('boost_librarydir')
+  ) 
+  boost_inc = include_directories(meson.get_cross_property('boost_includedir'))
+  boost_unit_test_framework_dep = declare_dependency(include_directories : boost_inc, 
+    dependencies : [boost_unit_test_framework_lib]
+  )
+else
+  boost_unit_test_framework_dep = dependency(
+    'boost', 
+    modules : 'unit_test_framework', 
+    version : '>=1.67.0'
+  )
+endif
 
 foreach p : progs
   exe = executable(p.underscorify(),
     p + '.cpp', 
     include_directories : include_directories('.'),
-    dependencies : [boost_unit_test_framework_dep, mqtt_cpp_dep],
+    dependencies : [boost_dep, boost_unit_test_framework_dep, mqtt_cpp_dep],
     cpp_args : cpp_args
   )
   test(p.underscorify(), exe)
