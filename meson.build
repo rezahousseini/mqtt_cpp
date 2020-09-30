@@ -39,7 +39,8 @@ openssl_dep = dependency('openssl', required : get_option('MQTT_USE_TLS'))
 
 mqtt_cpp_dep = declare_dependency(
   include_directories: include_directories('include'),
-  dependencies : [thread_dep, boost_dep, openssl_dep]
+  dependencies : [thread_dep, boost_dep, openssl_dep],
+  compile_args : ['-DBOOST_ASIO_USE_TS_EXECUTOR_AS_DEFAULT'],
 )
 
 if not meson.is_subproject()
