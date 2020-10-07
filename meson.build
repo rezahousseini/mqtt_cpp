@@ -1,7 +1,6 @@
 project('mqtt_cpp', 'cpp', 
-  version: '7.0.1',
   license: 'BSL-1.0',
-  default_options : ['warning_level=3', 'cpp_std=c++14']
+  default_options : ['warning_level=0', 'cpp_std=c++14']
 )
 
 if get_option('MQTT_STD_VARIANT') or \
@@ -30,7 +29,6 @@ if meson.is_cross_build()
   )
 else
   boost_dep = dependency('boost', 
-    modules : ['system', 'date_time'], 
     version : '>=1.67.0'
   )
 endif
