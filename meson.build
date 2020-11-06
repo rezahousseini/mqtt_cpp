@@ -15,23 +15,7 @@ endif
 
 thread_dep = dependency('threads')
 
-if meson.is_cross_build()
-  cxx = meson.get_compiler('cpp')
-  boost_system_lib = cxx.find_library('boost_system', 
-    dirs : meson.get_cross_property('boost_librarydir')
-  )
-  boost_date_time_lib = cxx.find_library('boost_date_time', 
-    dirs : meson.get_cross_property('boost_librarydir')
-  )
-  boost_inc = include_directories(meson.get_cross_property('boost_includedir'))
-  boost_dep = declare_dependency(include_directories : boost_inc, 
-    dependencies : [boost_system_lib, boost_date_time_lib]
-  )
-else
-  boost_dep = dependency('boost', 
-    version : '>=1.67.0'
-  )
-endif
+boost_dep = dependency('boost', version : '>=1.67.0')
 
 openssl_dep = dependency('openssl', required : get_option('MQTT_USE_TLS'))
 
